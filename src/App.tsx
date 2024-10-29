@@ -1,7 +1,7 @@
 // src/App.tsx
 import React from 'react';
 import { CounterProvider, useCounterContext } from './CounterContext';
-import { Button, Typography, Box, List, ListItem } from '@mui/material';
+import { Button, Typography, Box, List, ListItem, Card, CardContent } from '@mui/material';
 import './App.css';
 
 const CounterDisplay: React.FC = () => {
@@ -19,8 +19,15 @@ const CounterDisplay: React.FC = () => {
       <Box mt={4}>
         <Typography variant="h5">历史记录:</Typography>
         <List>
-          {history.map((value, index) => (
-            <ListItem key={index}>{value}</ListItem>
+          {history.map((entry, index) => (
+            <ListItem key={index}>
+              <Card variant="outlined" style={{ width: '300px', margin: '5px auto' }}>
+                <CardContent>
+                  <Typography variant="body1">值: {entry.value}</Typography>
+                  <Typography variant="body2" color="textSecondary">时间: {entry.timestamp}</Typography>
+                </CardContent>
+              </Card>
+            </ListItem>
           ))}
         </List>
       </Box>

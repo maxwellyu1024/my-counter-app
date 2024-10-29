@@ -1,13 +1,18 @@
 // src/useCounter.ts
 import { useState, useEffect, useMemo } from 'react';
 
+interface HistoryEntry {
+  value: number;
+  timestamp: string;
+}
+
 const useCounter = () => {
   const [count, setCount] = useState<number>(() => {
     const savedCount = localStorage.getItem('count');
     return savedCount ? JSON.parse(savedCount) : 0;
   });
 
-  const [history, setHistory] = useState<number[]>(() => {
+  const [history, setHistory] = useState<HistoryEntry[]>(() => {
     const savedHistory = localStorage.getItem('history');
     return savedHistory ? JSON.parse(savedHistory) : [];
   });
@@ -27,10 +32,15 @@ const useCounter = () => {
     return count * count;
   }, [count]);
 
+  const addHistoryEntry = (newCount: number) => {
+    const timestamp = new Date().toLocaleString();
+    setHistory((prevHistory) => [...prevHistory, { value: newCount, timestamp }]);
+  };
+
   const increment = () => {
     setCount((prev) => {
       const newCount = prev + 1;
-      setHistory((prevHistory) => [...prevHistory, newCount]);
+      addHistoryEntry(newCount);
       return newCount;
     });
   };
@@ -38,14 +48,14 @@ const useCounter = () => {
   const decrement = () => {
     setCount((prev) => {
       const newCount = prev - 1;
-      setHistory((prevHistory) => [...prevHistory, newCount]);
+      addHistoryEntry(newCount);
       return newCount;
     });
   };
 
   const reset = () => {
     setCount(0);
-    setHistory((prevHistory) => [...prevHistory, 0]);
+    addHistoryEntry(0);
   };
 
   return { count, squaredCount, increment, decrement, reset, history };
