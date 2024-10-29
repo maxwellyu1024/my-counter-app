@@ -32,30 +32,34 @@ const CounterDisplay: React.FC = () => {
   };
 
   return (
-    <Box textAlign="center" mt={4}>
-      <Typography variant="h4">计数器: {count}</Typography>
-      <Typography variant="h6">平方: {squaredCount}</Typography>
-      <Box mt={2}>
-        <Grid container spacing={2} justifyContent="center">
-          <Grid item>
-            <Button variant="contained" color="primary" onClick={handleIncrement}>增加</Button>
+    <Grid container direction="column" alignItems="center" spacing={2}>
+      <Grid item>
+        <Typography variant="h4">计数器: {count}</Typography>
+        <Typography variant="h6">平方: {squaredCount}</Typography>
+      </Grid>
+      <Grid item>
+        <Box mt={2}>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item>
+              <Button variant="contained" color="primary" onClick={handleIncrement}>增加</Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleDecrement}
+                disabled={count === 0}
+              >
+                减少
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" onClick={handleReset}>重置</Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleDecrement}
-              disabled={count === 0}
-            >
-              减少
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button variant="outlined" onClick={handleReset}>重置</Button>
-          </Grid>
-        </Grid>
-      </Box>
-      <Box mt={4}>
+        </Box>
+      </Grid>
+      <Grid item>
         <Typography variant="h5">历史记录:</Typography>
         <List>
           {history.map((entry, index) => (
@@ -69,14 +73,14 @@ const CounterDisplay: React.FC = () => {
             </ListItem>
           ))}
         </List>
-      </Box>
+      </Grid>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
       />
-    </Box>
+    </Grid>
   );
 };
 
