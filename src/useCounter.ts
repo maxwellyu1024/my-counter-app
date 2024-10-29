@@ -55,6 +55,7 @@ const useCounter = () => {
 
     const reset = () => {
         setCount(0);
+        addHistoryEntry(0);
     };
 
     const clearHistory = () => {

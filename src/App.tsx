@@ -1,7 +1,7 @@
 // src/App.tsx
 import React, { useState } from 'react';
 import { CounterProvider, useCounterContext } from './CounterContext';
-import { Button, Typography, Box, List, ListItem, Card, CardContent, Snackbar, Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import { Button, Typography, Box, List, ListItem, Card, CardContent, Snackbar, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import './App.css';
 
 const CounterDisplay: React.FC = () => {
@@ -49,40 +49,27 @@ const CounterDisplay: React.FC = () => {
   };
 
   return (
-    <Grid container direction="column" alignItems="center" spacing={2}>
-      <Grid item>
+    <Box display="flex" flexDirection="column" alignItems="center" >
+      <Box mb={2}>
         <Typography variant="h4">计数器: {count}</Typography>
         <Typography variant="h6">平方: {squaredCount}</Typography>
-      </Grid>
-      <Grid item>
-        <Box mt={2}>
-          <Grid container spacing={2} justifyContent="center">
-            <Grid item>
-              <Button variant="contained" color="primary" onClick={handleIncrement}>增加</Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleDecrement}
-                disabled={count === 0}
-              >
-                减少
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button variant="outlined" onClick={handleReset}>重置</Button>
-            </Grid>
-            <Grid item>
-              <Button variant="outlined" onClick={handleDialogOpen}>设置初始值</Button>
-            </Grid>
-            <Grid item>
-              <Button variant="outlined" onClick={clearHistory}>清除历史</Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Grid>
-      <Grid item>
+      </Box>
+      <Box mb={2} display="flex" justifyContent="center">
+        <Button variant="contained" color="primary" onClick={handleIncrement}>增加</Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleDecrement}
+          disabled={count === 0}
+          style={{ marginLeft: '10px' }}
+        >
+          减少
+        </Button>
+        <Button variant="outlined" onClick={handleReset} style={{ marginLeft: '10px' }}>重置</Button>
+        <Button variant="outlined" onClick={handleDialogOpen} style={{ marginLeft: '10px' }}>设置初始值</Button>
+        <Button variant="outlined" onClick={clearHistory} style={{ marginLeft: '10px' }}>清除历史</Button>
+      </Box>
+      <Box>
         <Typography variant="h5">历史记录:</Typography>
         <List>
           {history.map((entry, index) => (
@@ -96,7 +83,7 @@ const CounterDisplay: React.FC = () => {
             </ListItem>
           ))}
         </List>
-      </Grid>
+      </Box>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
@@ -130,7 +117,7 @@ const CounterDisplay: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Grid>
+    </Box>
   );
 };
 
