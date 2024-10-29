@@ -1,43 +1,30 @@
 import { useState, useEffect, useMemo } from 'react';
+import {
+    getFromLocalStorage,
+    saveToLocalStorage,
+    removeFromLocalStorage,
+} from '../utils/localStorageUtils';
 
-interface HistoryEntry {
-    value: number;
-    timestamp: string;
-}
 
 const useCounter = () => {
-    /*
-        const [count, setCount] = useState<number>(0);
-        const [history, setHistory] = useState<HistoryEntry[]>([]);
-    
-        useEffect(() => {
-            const savedCount = localStorage.getItem('count');
-            const savedHistory = localStorage.getItem('history');
-    
-            if (savedCount) {
-                setCount(JSON.parse(savedCount));
-            }
-            if (savedHistory) {
-                setHistory(JSON.parse(savedHistory));
-            }
-        }, []);
-    */
-    const [count, setCount] = useState<number>(() => {
-        const savedCount = localStorage.getItem('count');
-        return savedCount ? JSON.parse(savedCount) : 0;
-    });
-
-    const [history, setHistory] = useState<HistoryEntry[]>(() => {
-        const savedHistory = localStorage.getItem('history');
-        return savedHistory ? JSON.parse(savedHistory) : [];
-    });
+    const [count, setCount] = useState<number>(0);
+    const [history, setHistory] = useState<HistoryEntry[]>([]);
 
     useEffect(() => {
-        localStorage.setItem('count', JSON.stringify(count));
-        localStorage.setItem('history', JSON.stringify(history));
-        console.log(`当前计数: ${count}`);
+        const savedCount = getFromLocalStorage('count');
+        const savedHistory = getFromLocalStorage('history');
 
+        if (savedCount) {
+            setCount(savedCount);
+        }
+        if (savedHistory) {
+            setHistory(savedHistory);
+        }
+    }, []);
 
+    useEffect(() => {
+        saveToLocalStorage('count', count);
+        saveToLocalStorage('history', history);
     }, [count, history]);
 
     const squaredCount = useMemo(() => {
@@ -73,15 +60,11 @@ const useCounter = () => {
 
     const clearHistory = () => {
         setHistory([]);
-        localStorage.removeItem('history');
+        removeFromLocalStorage('history'); // 清除本地存储中的历史记录
     };
 
-    const setInitialValue = (value: number) => {
-        setCount(value);
-        addHistoryEntry(value);
-    };
 
-    return { count, squaredCount, increment, decrement, reset, history, clearHistory, setInitialValue };
+    return { count, squaredCount, increment, decrement, reset, history, clearHistory };
 };
 
 export default useCounter;
