@@ -1,15 +1,21 @@
-// src/CounterContext.tsx
-import React, { createContext, useContext } from 'react';
-import useCounter from './useCounter';
+
+import React from 'react';
+import useCounter from '../hooks/useCounter';
+
+import { createContext, useContext } from 'react';
+
+
 interface CounterContextType {
     count: number;
+    squaredCount: number;
     increment: () => void;
     decrement: () => void;
     reset: () => void;
     clearHistory: () => void;
-    history: { value: number; timestamp: string }[];
+    history: HistoryEntry[];
     setInitialValue: (value: number) => void;
 }
+
 const CounterContext = createContext<CounterContextType | undefined>(undefined);
 
 export const CounterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

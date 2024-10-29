@@ -1,4 +1,3 @@
-// src/useCounter.ts
 import { useState, useEffect, useMemo } from 'react';
 
 interface HistoryEntry {
@@ -7,6 +6,22 @@ interface HistoryEntry {
 }
 
 const useCounter = () => {
+    /*
+        const [count, setCount] = useState<number>(0);
+        const [history, setHistory] = useState<HistoryEntry[]>([]);
+    
+        useEffect(() => {
+            const savedCount = localStorage.getItem('count');
+            const savedHistory = localStorage.getItem('history');
+    
+            if (savedCount) {
+                setCount(JSON.parse(savedCount));
+            }
+            if (savedHistory) {
+                setHistory(JSON.parse(savedHistory));
+            }
+        }, []);
+    */
     const [count, setCount] = useState<number>(() => {
         const savedCount = localStorage.getItem('count');
         return savedCount ? JSON.parse(savedCount) : 0;
@@ -22,9 +37,7 @@ const useCounter = () => {
         localStorage.setItem('history', JSON.stringify(history));
         console.log(`当前计数: ${count}`);
 
-        return () => {
-            console.log(`清理计数: ${count}`);
-        };
+
     }, [count, history]);
 
     const squaredCount = useMemo(() => {
@@ -55,7 +68,7 @@ const useCounter = () => {
 
     const reset = () => {
         setCount(0);
-        addHistoryEntry(0);
+        setHistory([]);
     };
 
     const clearHistory = () => {
