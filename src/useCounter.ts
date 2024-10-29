@@ -2,63 +2,72 @@
 import { useState, useEffect, useMemo } from 'react';
 
 interface HistoryEntry {
-  value: number;
-  timestamp: string;
+    value: number;
+    timestamp: string;
 }
 
 const useCounter = () => {
-  const [count, setCount] = useState<number>(() => {
-    const savedCount = localStorage.getItem('count');
-    return savedCount ? JSON.parse(savedCount) : 0;
-  });
+    const [count, setCount] = useState<number>(() => {
+        const savedCount = localStorage.getItem('count');
+        return savedCount ? JSON.parse(savedCount) : 0;
+    });
 
-  const [history, setHistory] = useState<HistoryEntry[]>(() => {
-    const savedHistory = localStorage.getItem('history');
-    return savedHistory ? JSON.parse(savedHistory) : [];
-  });
+    const [history, setHistory] = useState<HistoryEntry[]>(() => {
+        const savedHistory = localStorage.getItem('history');
+        return savedHistory ? JSON.parse(savedHistory) : [];
+    });
 
-  useEffect(() => {
-    localStorage.setItem('count', JSON.stringify(count));
-    localStorage.setItem('history', JSON.stringify(history));
-    console.log(`当前计数: ${count}`);
+    useEffect(() => {
+        localStorage.setItem('count', JSON.stringify(count));
+        localStorage.setItem('history', JSON.stringify(history));
+        console.log(`当前计数: ${count}`);
 
-    return () => {
-      console.log(`清理计数: ${count}`);
+        return () => {
+            console.log(`清理计数: ${count}`);
+        };
+    }, [count, history]);
+
+    const squaredCount = useMemo(() => {
+        console.log('计算平方值');
+        return count * count;
+    }, [count]);
+
+    const addHistoryEntry = (newCount: number) => {
+        const timestamp = new Date().toLocaleString();
+        setHistory((prevHistory) => [{ value: newCount, timestamp }, ...prevHistory]);
     };
-  }, [count, history]);
 
-  const squaredCount = useMemo(() => {
-    console.log('计算平方值');
-    return count * count;
-  }, [count]);
+    const increment = () => {
+        setCount((prev) => {
+            const newCount = prev + 1;
+            addHistoryEntry(newCount);
+            return newCount;
+        });
+    };
 
-  const addHistoryEntry = (newCount: number) => {
-    const timestamp = new Date().toLocaleString();
-    setHistory((prevHistory) => [...prevHistory, { value: newCount, timestamp }]);
-  };
+    const decrement = () => {
+        setCount((prev) => {
+            const newCount = prev - 1;
+            addHistoryEntry(newCount);
+            return newCount;
+        });
+    };
 
-  const increment = () => {
-    setCount((prev) => {
-      const newCount = prev + 1;
-      addHistoryEntry(newCount);
-      return newCount;
-    });
-  };
+    const reset = () => {
+        setCount(0);
+    };
 
-  const decrement = () => {
-    setCount((prev) => {
-      const newCount = prev - 1;
-      addHistoryEntry(newCount);
-      return newCount;
-    });
-  };
+    const clearHistory = () => {
+        setHistory([]);
+        localStorage.removeItem('history');
+    };
 
-  const reset = () => {
-    setCount(0);
-    addHistoryEntry(0);
-  };
+    const setInitialValue = (value: number) => {
+        setCount(value);
+        addHistoryEntry(value);
+    };
 
-  return { count, squaredCount, increment, decrement, reset, history };
+    return { count, squaredCount, increment, decrement, reset, history, clearHistory, setInitialValue };
 };
 
 export default useCounter;
