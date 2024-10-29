@@ -1,11 +1,11 @@
 // src/App.tsx
 import React from 'react';
 import { CounterProvider, useCounterContext } from './CounterContext';
-import { Button, Typography, Box } from '@mui/material';
+import { Button, Typography, Box, List, ListItem } from '@mui/material';
 import './App.css';
 
 const CounterDisplay: React.FC = () => {
-  const { count, squaredCount, increment, decrement, reset } = useCounterContext();
+  const { count, squaredCount, increment, decrement, reset, history } = useCounterContext();
 
   return (
     <Box textAlign="center" mt={4}>
@@ -15,6 +15,14 @@ const CounterDisplay: React.FC = () => {
         <Button variant="contained" color="primary" onClick={increment}>增加</Button>
         <Button variant="contained" color="secondary" onClick={decrement}>减少</Button>
         <Button variant="outlined" onClick={reset}>重置</Button>
+      </Box>
+      <Box mt={4}>
+        <Typography variant="h5">历史记录:</Typography>
+        <List>
+          {history.map((value, index) => (
+            <ListItem key={index}>{value}</ListItem>
+          ))}
+        </List>
       </Box>
     </Box>
   );
